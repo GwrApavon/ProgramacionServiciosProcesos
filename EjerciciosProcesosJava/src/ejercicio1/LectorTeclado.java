@@ -18,13 +18,15 @@ public class LectorTeclado {
 	public static void main(String[] args) {
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
+		String entrada = "";
 		try {
 			System.out.println("Primer Número:");
-			int num1 = br.read();
+			entrada = br.readLine();
+			int num1 = Integer.parseInt(entrada);
 			
 			System.out.println("Segundo Número:");
-			int num2 = br.read();
+			entrada = br.readLine();
+			int num2 = Integer.parseInt(entrada);
 			
 			System.out.println("La division de " + num1 + "/" + num2 +" es: " + (num1/num2));
 			br.close();
