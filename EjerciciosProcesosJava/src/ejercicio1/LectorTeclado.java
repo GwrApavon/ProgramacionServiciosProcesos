@@ -27,8 +27,13 @@ public class LectorTeclado {
 			System.out.println("Segundo Número:");
 			entrada = br.readLine();
 			int num2 = Integer.parseInt(entrada);
-			
-			System.out.println("La division de " + num1 + "/" + num2 +" es: " + (num1/num2));
+			int division = 0;
+			try {
+				division = num1/num2;
+			}catch(ArithmeticException AE) {
+				AE.printStackTrace();
+			}
+			System.out.println("La division de " + num1 + "/" + num2 +" es: " + division);
 			br.close();
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
