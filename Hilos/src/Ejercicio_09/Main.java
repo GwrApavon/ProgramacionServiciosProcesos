@@ -3,6 +3,7 @@
  */
 package Ejercicio_09;
 
+import java.io.File;
 import java.util.*;
 
 /**
@@ -16,35 +17,34 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 
-		ArrayList <String> ficheros = new ArrayList<String>();
 		
-		ficheros.add("fichero1.txt");
-		ficheros.add("fichero2.txt");
-		ficheros.add("fichero3.txt");
-		ficheros.add("fichero4.txt");
+		ArrayList <String> fpar = new ArrayList<String>();
+		ArrayList <String> fimpar = new ArrayList<String>();
+
 		
-		int vuelta = 1;
-		Hilo par = null;
-		Hilo impar = null;
-		int totalLineas = 0;
-		for (String fichero : ficheros) {
-			
-			if(vuelta%2 == 0) {
-				par = new Hilo(fichero);
-				par.start();
-				totalLineas = par.contadorLineas;
+		File f = new File("D:\\Ángel Pavón\\WS - Programacón de servicios y procesos\\ProgramacionServiciosProcesos\\Hilos\\Ficheros");
+		int vuelta = 0;
+		for (String s : f.list()) {
+			if(vuelta%2 == 0 || vuelta == 0) {
+				fpar.add(s);
 			}
-			else {
-				impar = new Hilo(fichero);
-				impar.start();
-				totalLineas = impar.contadorLineas;
+			else if(vuelta%2 != 0){
+				fimpar.add(s);
 			}
-			vuelta++;
 		}
+		for (String string : fimpar) {
+			System.out.println(string);
+		}
+		Hilo par = new Hilo(fpar);
+		par.start();
+			
+		Hilo impar = new Hilo(fimpar);
+		impar.start();
+		
 		do{
 			
 		}while(par.isAlive()||impar.isAlive());
-		System.out.println("El total de lineas entre los 4 ficheros es: " + totalLineas);
+		System.out.println("El total de lineas entre los 4 ficheros es: " /*+  totalLineas*/);
 	}
 
 }
