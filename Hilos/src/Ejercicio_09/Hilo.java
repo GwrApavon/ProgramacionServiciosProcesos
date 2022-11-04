@@ -7,12 +7,18 @@ public class Hilo extends Thread{
 	
 
 	private ArrayList <String> ficheros = new ArrayList<String>();
+	private int totalLineas;
 	
 	public Hilo(ArrayList <String> ficheros) {
 		
 		this.ficheros = ficheros;
+		this.totalLineas = 0;
 	}
 	
+
+	public int getTotalLineas() {
+		return totalLineas;
+	}
 
 	public void run() {
 		try {
@@ -27,7 +33,7 @@ public class Hilo extends Thread{
 				String linea = br.readLine();
 				while(br.readLine() != null) {
 					contadorLineas++;
-
+					totalLineas++;
 				}
 				br.close();
 				if(contadorLineas == 1) {
