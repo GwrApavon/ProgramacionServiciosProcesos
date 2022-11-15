@@ -28,6 +28,7 @@ public class Cuenta {
 	 * @param nom
 	 */
 	void RetirarDinero(int cant, String nom) {
+		if(getSaldo()>=cant) {
 		System.out.println("SE VA A RETIRAR SALDO (ACTUAL ES: " + getSaldo() + ")");
 		try {
 			Thread.sleep(500);
@@ -38,17 +39,22 @@ public class Cuenta {
 				System.out.println(nom + " retira =>" + cant + " ACTUAL(" + getSaldo() + ")");
 				if(nom == "Juan" ) {
 					gastoJuan++;
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException ex) {
+					}
 				}
 				if(nom == "Ana") {
 					gastoAna++;
 				}
-			
+		}	
 		} else {
 			System.out.println(nom + " No puede retirar dinero, NO HAY SALDO(" + getSaldo() + ")");
 		}
 		if (getSaldo() < 0) {
 			System.out.println("SALDO NEGATIVO => " + getSaldo());
 		}
+		
 		
 	}// retirar
 

@@ -14,7 +14,7 @@ public class SacarDinero extends Thread {
 		}
 		
 		try {
-			sleep(500);
+			sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -23,7 +23,7 @@ public class SacarDinero extends Thread {
 			System.out.println("Juan ha sacado dinero " + c.getGastoJuan() + " veces");
 		}
 		if(getName() == "Ana") {
-			System.out.println("Juan ha sacado dinero " + c.getGastoAna() + " veces");
+			System.out.println("Ana ha sacado dinero " + c.getGastoAna() + " veces");
 		}
 	}// run
 }
