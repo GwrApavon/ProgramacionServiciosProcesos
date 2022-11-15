@@ -7,6 +7,9 @@
  */
 package ejercicio1;
 
+import java.io.*;
+import java.util.Scanner;
+
 /**
  * @author alu
  *
@@ -17,8 +20,57 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
+		
+		  Scanner s = new Scanner(System.in);
+		  Runtime r = Runtime.getRuntime();    
+		  
+		  String comando= "java -cp bin ejercicio1.Division" ;
+		  Process p=null;
+	      try {
+	  		  p = r.exec( comando );
+	          InputStream is = p.getInputStream();
+	          OutputStream os = p.getOutputStream();
+	          BufferedWriter bw = new BufferedWriter(new OutputStreamWriter (os));
+	          BufferedReader br = new BufferedReader(new InputStreamReader (is));    
+	          
+	          String linea;
+			  while((linea = br.readLine())!=null) { //lee una linea del fichero 
+				 
+	              System.out.println(linea); 
+	              bw.write(s.nextLine());
+	              bw.write('\n');
+	              bw.flush();
+	             
+	          }
+			 bw.close();
+             br.close();
+			 
+	        } 
+	        catch (Exception e) {
+	              e.printStackTrace();
+	        }
+			
+			// CONTROL DE LOS MENSAJES DE ERROR
+			try {
+				InputStream es = p.getErrorStream();					
+				BufferedReader br = new BufferedReader(new InputStreamReader(es));
+				String liner = null;
+				while ((liner = br.readLine()) != null) {
+					System.out.println("ERROR >" + liner);
+				}
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
+			
+			// COMPROBACION DE ERROR:  0 indica que ha terminado bien
+			int exitVal;
+			try {
+				exitVal = p.waitFor();
+				System.out.println("Valor de Salida: " + exitVal);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} 
+	}  
+	
 
 }

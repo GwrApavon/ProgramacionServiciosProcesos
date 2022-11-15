@@ -25,7 +25,7 @@ public class Main {
 	          InputStream StreamEntrada = p.getInputStream();
 	          BufferedReader br = new BufferedReader (new InputStreamReader (StreamEntrada));                      
 	          String linea;
-			  while((linea = br.readLine())!=null) { //lee una l�nea del fichero 
+			  while((linea = br.readLine())!=null) { //lee una linea del fichero 
 	              System.out.println(linea); 
 			  }
 			  br.close();
