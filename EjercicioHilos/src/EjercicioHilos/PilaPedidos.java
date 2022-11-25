@@ -1,6 +1,6 @@
 /**
  *  Pila de pedidos, los pedidos realizados por los clientes(HiloCliente) se guardarán aquí con un maximo de
- *  pedidos igual al número de ayudantes(HiloAyudante) creados.
+ *  pedidos igual al doble del número de ayudantes(HiloAyudante) creados.
  */
 package EjercicioHilos;
 
@@ -11,7 +11,7 @@ package EjercicioHilos;
 public class PilaPedidos {
 
 	String [] listaPedidos;
-	private int size;
+	private int size = 5;
 	private int last=0;
 	
 	//CONSTRUCTOR DE LA PILA (EL  TAMAÑO DEPENDE DEL NUMERO DE AYUDANTES)
@@ -23,10 +23,10 @@ public class PilaPedidos {
 	
 	//AÑADE UN PEDIDO A LA PILA
 	//SE HACE DE MANERA SINCRONIZADA PARA QUE NO PUEDAN ACCEDER AL MISMO TIEMPO LOS AYUDANTES
-	public synchronized boolean agnade (String pedido) {
+	public boolean aniade (String pedido) {
 		if (!estaLlena()) {
-			listaPedidos[last] = pedido;
-			last++;
+			listaPedidos[getLast()] = pedido;
+			last = getLast() + 1;
 			return true;
 		}
 		return false;
@@ -34,10 +34,10 @@ public class PilaPedidos {
 
 	//RETIRA UN ENTERO DE LA PILA, 
 	//SE HACE DE MANERA SINCRONIZADA PARA QUE NO PUEDAN ACCEDER AL MISMO TIEMPO LOS AYUDANTES
-	public synchronized String sacar () {
+	public String sacar () {
 		if (!estaVacia()) {
-			last--;
-			return listaPedidos[last];
+			last = getLast() - 1;
+			return listaPedidos[getLast()];
 		}
 		return "";
 	}
@@ -50,15 +50,19 @@ public class PilaPedidos {
 
 	 //COMPRUEBA SI LA PILA ESTÁ VACÍA
 	public boolean estaVacia() {
-		if (last < 1) return true;
+		if (getLast() < 1) return true;
 		return false;
 	}
 
 	//COMPRUEBA SI LA PILA ESTÁ LLENA
 	public boolean estaLlena() {
-		if (last == size) {
+		if (getLast() == size) {
 			return true;
 		}
 		return false;
+	}
+
+	public int getLast() {
+		return last;
 	}
 }

@@ -10,11 +10,16 @@ package EjercicioHilos;
 public class CajaRegistradora {
 
 	private int dineroTotal;
+	private int numClientes;
 	
-	public CajaRegistradora() {
+	public CajaRegistradora(int clientes) {
 		
 		dineroTotal = 0;
-		
+		numClientes = clientes;
+	}
+
+	public synchronized int getNumClientes() {
+		return numClientes;
 	}
 
 	public int getDineroTotal() {
@@ -22,13 +27,14 @@ public class CajaRegistradora {
 	}
 
 	public synchronized void setDineroTotal(int dineroTotal) {
+		this.numClientes--;
 		this.dineroTotal += dineroTotal;
 	}
 
 	@Override
 	//Devuelve el dinero que hay en la caja una vez terminan los pedidos
 	public String toString() {
-		return "CajaRegistradora [dineroTotal=" + dineroTotal + "]";
+		return "CajaRegistradora [dineroTotal=" + getDineroTotal() + "]";
 	}
 	
 	

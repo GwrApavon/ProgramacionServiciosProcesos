@@ -22,17 +22,15 @@ public class HiloCliente extends Thread {
 	public void run() {
 		Random rnd = new Random();
 		try {
-			int tiempo =rnd.nextInt(2)*1000; 
-			System.out.println("soy " + this.getName() + " voy a dormir " + tiempo);
-			sleep(tiempo); // DUERME EL TIEMPO QUE SE HAYA GENERADO EN EL RANDOM
 			synchronized (p) {
 				while (p.estaLlena()) { //COMPRUEBA SI LA PILA ESTÁ LLENA 
-					System.err.println("No puedo producir mas, esperare, y soy " + this.getName());
+					System.err.println("No puedo producir mas, esperare, soy " + this.getName());
 					p.wait(); //ESPERA SI LO ESTÁ
 				}; 
-				System.out.println("añado " + pedido + ", soy: " + this.getName());
-				p.agnade(pedido); //AÑADE EL PEDIDO SI NO LO ESTÁ Y LO NOTIFICA
-				p.notify();
+				System.out.println("añado " + pedido + ", soy: " + this.getName()
+									+ ". Pedidos pendientes: " + p.getLast());
+				p.aniade(pedido); //AÑADE EL PEDIDO SI NO LO ESTÁ Y LO NOTIFICA
+				p.notifyAll();
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
