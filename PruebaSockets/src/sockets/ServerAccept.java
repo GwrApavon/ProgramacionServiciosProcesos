@@ -7,12 +7,12 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ServidorAccept extends Thread{
+public class ServerAccept extends Thread{
 
 	private Socket cliente;
 	private ServerSocket server;
 	
-	public ServidorAccept(ServerSocket ss, Socket c) {
+	public ServerAccept(ServerSocket ss, Socket c) {
 		this.cliente = c;
 		this.server = ss;
 	}
