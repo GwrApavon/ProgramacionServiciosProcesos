@@ -36,16 +36,16 @@ public class ServerAccept extends Thread{
 			
 			//Envío la pregunta al cliente
 			//int operacion = rnd.nextInt(0,4); esto sería para  que funcionase correctamente el switch
-			int operacion = 3;
+			int operacion = 2; //Pongo 2 para que sea siempre la multiplicación que pide en el enunciado
 			switch(operacion) {
 			
-				case 0: escribirCliente.write("Tu id es" + id +" sumalo por 7 y devuelve");
+				case 0: escribirCliente.write("Tu id es " + id +" sumalo por 7 y devuelve");
 						break;
-				case 1: escribirCliente.write("Tu id es" + id +" restalo por 7 y devuelve");
+				case 1: escribirCliente.write("Tu id es " + id +" restalo por 7 y devuelve");
 						break;
-				case 2: escribirCliente.write("Tu id es" + id +" multiplicalo por 7 y devuelve");
+				case 2: escribirCliente.write("Tu id es " + id +" multiplicalo por 7 y devuelve");
 						break;
-				case 3: escribirCliente.write("Tu id es" + id +" dividelo por 7 y devuelve");
+				case 3: escribirCliente.write("Tu id es " + id +" dividelo por 7 y devuelve");
 						break;
 			}
 			escribirCliente.newLine();
@@ -54,10 +54,10 @@ public class ServerAccept extends Thread{
 			String linea = leeRespuesta.readLine();
 			System.out.println("He leido =>" + linea);
 			
-			int respuesta = Integer.parseInt(linea.split(" ")[4]);
+			int respuesta = Integer.parseInt(linea.split(" ")[3]);
 			
 			if(comprobarNumero(respuesta, operacion, id)) {
-				escribirCliente.write("Tu id es" + id +" sumalo por 7 y devuelve");
+				escribirCliente.write(respuesta + " OK"); //Responde con un ok si el resultado es correcto
 				escribirCliente.newLine();
 				escribirCliente.flush();
 			}
@@ -67,6 +67,7 @@ public class ServerAccept extends Thread{
 		}
 	}
 	
+	//Metodo para comprobar si el resultado es correcto dependiendo de la operación
 	private boolean comprobarNumero(int res, int o, int id) {
 		if(o == 0 && (res == (id+7))) {
 			return true;

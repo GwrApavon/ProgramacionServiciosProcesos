@@ -13,7 +13,7 @@ import java.net.UnknownHostException;
 public class ClienteStream {
 	
 	public static void main(String[] args) {
-		String host = "192.168.2.61";
+		String host = " "; //Lo dejo en blanco porque habrá que cambiarlo y ya he hecho las comprobaciones con la mía
 		int puerto = 6000;
 		
 		// creamos el socket
@@ -37,8 +37,8 @@ public class ClienteStream {
 			// Dado que la respuesta del servidor siempre llevará el mismo 
 			//"Tu id es 'num' multiplicalo por 7 y devuelve" 
 			//con split recogeré el número y la operación
-			int id = Integer.parseInt(linea.split(" ")[4]);
-			String operacion = linea.split(" ")[5];
+			int id = Integer.parseInt(linea.split(" ")[3]);
+			String operacion = linea.split(" ")[4];
 			String respuesta = "Respuesta de prueba"; // Pongo eso por si lo siguiente no se ejecuta que se muestre algo
 			//No se va a ejecutar ninguna que no sea la multiplicación porque en el ejercicio lo dice así 
 			//pero igualmente añado las demás opciones
@@ -54,7 +54,7 @@ public class ClienteStream {
 			else if(operacion.equals("dividelo")) {
 				respuesta = "El resultado es " + (id / 7);
 			}
-		// env�o algo al servidor
+		// envío algo al servidor
 			escribirAlServidor.write(respuesta);
 			escribirAlServidor.newLine();
 			escribirAlServidor.flush();
