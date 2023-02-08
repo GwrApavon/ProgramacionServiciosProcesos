@@ -23,11 +23,11 @@ public class ServidorStream {
 				System.out.println("se ha conectado, esperando entrada Cliente");
 				ServerAccept sa = new ServerAccept(cliente);
 				sa.start();
-				cl--;
-			
+				cl--;			
 			}while(cl > 0);
 			// cierro todos los recursos
 			miServidor.close();
+			
 			
 		} catch (IOException e) {
 			e.printStackTrace();
