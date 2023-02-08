@@ -13,7 +13,7 @@ import java.net.UnknownHostException;
 public class ClienteStream {
 	
 	public static void main(String[] args) {
-		String host = " "; //Lo dejo en blanco porque habrá que cambiarlo y ya he hecho las comprobaciones con la mía
+		String host = "192.168.56.1";
 		int puerto = 6000;
 		
 		// creamos el socket
