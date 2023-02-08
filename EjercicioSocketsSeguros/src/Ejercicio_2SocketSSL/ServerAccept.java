@@ -1,4 +1,4 @@
-package EjercicioSocketsS;
+package Ejercicio_2SocketSSL;
 
 
 import java.io.BufferedReader;
@@ -38,16 +38,16 @@ public class ServerAccept extends Thread{
 			String linea = leeRespuesta.readLine(); 
 			System.out.println("He leido: " + linea);
 			
-			escribirCliente.write("Bienvenido cliente, ya puedes hablar infinitamente conmigo"); //Responde con un ok si el resultado es correcto
+			escribirCliente.write("Bienvenido cliente, ya puedes hablar infinitamente conmigo");
 			escribirCliente.newLine();
 			escribirCliente.flush();
+			sleep(3000);
 			do {
 				linea = leeRespuesta.readLine(); 
 				System.out.println("He leido: " + linea);
-				sleep(3000);
 			}while(!linea.equals("*"));
 			escribirCliente.close();		
-		}catch (IOException e) {
+		}catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
