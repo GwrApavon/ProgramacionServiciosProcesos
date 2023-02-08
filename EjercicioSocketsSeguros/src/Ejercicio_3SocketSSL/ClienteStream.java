@@ -1,14 +1,9 @@
-package EjercicioSocketsS;
+package Ejercicio_3SocketSSL;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.UnknownHostException;
 import java.util.Properties;
 
@@ -38,20 +33,8 @@ public class ClienteStream {
 		try {
 			SSLSocketFactory factoria = (SSLSocketFactory) SSLSocketFactory.getDefault();
 			SSLSocket miSocket = (SSLSocket) factoria.createSocket(host,puerto);
-					
-			// preparo el sitio para leer
-					InputStream lecturaSocket = miSocket.getInputStream();
-					InputStreamReader lector = new InputStreamReader(lecturaSocket);
-					BufferedReader leeRespuesta = new BufferedReader(lector);
-						
-			//Dependiendo de lo que reciba hará una operación distinta
-						
-					String linea = leeRespuesta.readLine(); 
-					System.out.println("He leido: " + linea);
-					
-					leeRespuesta.close();	
-					miSocket.close();
-						
+			ClienteThread ct = new ClienteThread(miSocket);
+			ct.start();	
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

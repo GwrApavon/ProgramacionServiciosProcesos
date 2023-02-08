@@ -1,4 +1,4 @@
-package EjercicioSocketsS;
+package Ejercicio_1SocketSSL;
 
 
 import java.io.BufferedReader;
@@ -12,11 +12,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Random;
 
+import javax.net.ssl.SSLSocket;
+
 public class ServerAccept extends Thread{
 
-	private Socket cliente;
+	private SSLSocket cliente;
 	
-	public ServerAccept(Socket c) {
+	public ServerAccept(SSLSocket c) {
 		this.cliente = c;
 	}
 	
@@ -30,11 +32,14 @@ public class ServerAccept extends Thread{
 			escribirCliente.write("Bienvenido cliente"); //Responde con un ok si el resultado es correcto
 			escribirCliente.newLine();
 			escribirCliente.flush();
-			
+			sleep(3000);
 			escribirCliente.close();
 			cliente.close();
-		}catch (IOException e) {
-			e.printStackTrace();
+		}catch (IOException ioe) {
+			ioe.printStackTrace();
+		} catch (InterruptedException ie) {
+			// TODO Auto-generated catch block
+			ie.printStackTrace();
 		}
 	}
 }

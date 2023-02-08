@@ -1,4 +1,4 @@
-package EjercicioSocketsS;
+package Ejercicio_1SocketSSL;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -10,6 +10,7 @@ import java.util.Properties;
 
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
 
 
 public class ServidorStream {
@@ -39,18 +40,14 @@ public class ServidorStream {
 			int cl = Integer.parseInt(properties.getProperty("numClientes"));
 			do {
 				System.out.println("SERVIDOR: Escuchando por el puerto " + puerto);
-				miServidor.setSoTimeout(3000);
-				Socket cliente = miServidor.accept();
+				SSLSocket cliente = (SSLSocket) miServidor.accept();
 				System.out.println("se ha conectado, esperando entrada Cliente");
 				ServerAccept sa = new ServerAccept(cliente);
 				sa.start();
 				cl--;
 			}while(cl > 0);
 			// cierro todos los recursos
-			miServidor.close();
-			
-		}catch(SocketTimeoutException stoe) {
-			stoe.printStackTrace();
+			miServidor.close();		
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

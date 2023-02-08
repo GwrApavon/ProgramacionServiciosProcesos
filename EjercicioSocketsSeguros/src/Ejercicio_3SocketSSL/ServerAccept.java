@@ -1,4 +1,4 @@
-package Ejercicio_2SocketSSL;
+package Ejercicio_3SocketSSL;
 
 
 import java.io.BufferedReader;
@@ -36,9 +36,10 @@ public class ServerAccept extends Thread{
 			escribirCliente.write("Bienvenido cliente, ya puedes hablar infinitamente conmigo");
 			escribirCliente.newLine();
 			escribirCliente.flush();
-			sleep(3000);
 			
+			sleep(3000);
 			String linea = leeRespuesta.readLine(); 
+			String lineaaux = linea;
 			if (linea != null && !linea.equals("*")){
 				System.out.println("He leido: " + linea);
 				linea = null;
@@ -47,23 +48,23 @@ public class ServerAccept extends Thread{
 					linea = leeRespuesta.readLine(); 
 					if (linea != null && !linea.equals("*")){
 						System.out.println("He leido: " + linea);
+						lineaaux = linea;
 						linea = null;
 					}
 					else {
 						escribirCliente.write("Tiempo de espera agotado, se va a cerrar la conexión");
 						escribirCliente.newLine();
 						escribirCliente.flush();
-						escribirCliente.close();
 						salir = true;
 					}
-				}while(!linea.equals("*") || salir == false);
+				}while(!lineaaux.equals("*") || salir == false);
 			}
 			else {
 				escribirCliente.write("Tiempo de espera agotado, se va a cerrar la conexión");
 				escribirCliente.newLine();
-				escribirCliente.flush();
-				escribirCliente.close();		
+				escribirCliente.flush();		
 			}
+			escribirCliente.close();
 		}catch (IOException ioe) {
 			ioe.printStackTrace();
 		} catch (InterruptedException ie) {

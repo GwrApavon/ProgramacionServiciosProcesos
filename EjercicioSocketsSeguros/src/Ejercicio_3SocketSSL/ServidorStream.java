@@ -1,4 +1,4 @@
-package Ejercicio_2SocketSSL;
+package Ejercicio_3SocketSSL;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
