@@ -11,7 +11,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.UnknownHostException;
 import java.util.Properties;
-import java.util.Scanner;
 
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
@@ -19,7 +18,6 @@ import javax.net.ssl.SSLSocketFactory;
 public class ClienteStream {
 	
 	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
 		String host = "192.168.2.61";
 		int puerto = 6000;
 		String ficheroProperties = "parametros.properties";
@@ -41,37 +39,18 @@ public class ClienteStream {
 			SSLSocketFactory factoria = (SSLSocketFactory) SSLSocketFactory.getDefault();
 			SSLSocket miSocket = (SSLSocket) factoria.createSocket(host,puerto);
 					
-			// preparo el sitio donde escribir� en el socket
-			OutputStream escrituraSocket = miSocket.getOutputStream();
-			OutputStreamWriter escritor = new OutputStreamWriter(escrituraSocket);
-			BufferedWriter escribirAlServidor = new BufferedWriter(escritor);
 			// preparo el sitio para leer
-			InputStream lecturaSocket = miSocket.getInputStream();
-			InputStreamReader lector = new InputStreamReader(lecturaSocket);
-			BufferedReader leeRespuesta = new BufferedReader(lector);
-			
-			//Mando el saludo inicial
-			String msg = sc.nextLine();
-			escribirAlServidor.write(msg);
-			escribirAlServidor.newLine();
-			escribirAlServidor.flush();
-			//Leo la respuesta obtenida del servidor	
-			String linea = leeRespuesta.readLine(); 
-			System.out.println("He leido: " + linea);
-			
-			
-			//Empiezo con el dialogo infinito con el servidor (sin esperar respuesta)
-			//Se terminaría la conversación con un "*"
-			do {
-				msg = sc.nextLine();
-				escribirAlServidor.write(msg);
-				escribirAlServidor.newLine();
-				escribirAlServidor.flush();
-			}while(!msg.equals("*"));
-			
-			leeRespuesta.close();
-			escribirAlServidor.close();
-			miSocket.close();
+					InputStream lecturaSocket = miSocket.getInputStream();
+					InputStreamReader lector = new InputStreamReader(lecturaSocket);
+					BufferedReader leeRespuesta = new BufferedReader(lector);
+						
+			//Dependiendo de lo que reciba hará una operación distinta
+						
+					String linea = leeRespuesta.readLine(); 
+					System.out.println("He leido: " + linea);
+					
+					leeRespuesta.close();	
+					miSocket.close();
 						
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block

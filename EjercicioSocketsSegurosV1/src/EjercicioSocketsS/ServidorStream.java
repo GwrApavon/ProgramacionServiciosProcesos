@@ -10,7 +10,6 @@ import java.util.Properties;
 
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
-import javax.net.ssl.SSLSocket;
 
 
 public class ServidorStream {
@@ -40,7 +39,8 @@ public class ServidorStream {
 			int cl = Integer.parseInt(properties.getProperty("numClientes"));
 			do {
 				System.out.println("SERVIDOR: Escuchando por el puerto " + puerto);
-				SSLSocket cliente = (SSLSocket) miServidor.accept();
+				miServidor.setSoTimeout(3000);
+				Socket cliente = miServidor.accept();
 				System.out.println("se ha conectado, esperando entrada Cliente");
 				ServerAccept sa = new ServerAccept(cliente);
 				sa.start();
