@@ -14,7 +14,10 @@ import javax.net.ssl.SSLSocket;
 
 public class ClienteThread extends Thread{
 
-	SSLSocket miSocket;
+	public SSLSocket miSocket;
+	BufferedWriter escribirAlServidor = null;
+	BufferedReader leeRespuesta = null;
+	
 	public ClienteThread(SSLSocket s) {
 		miSocket = s;
 	}
@@ -22,36 +25,36 @@ public class ClienteThread extends Thread{
 	
 	public void run() {
 		Scanner sc = new Scanner(System.in);
-		// preparo el sitio donde escribir� en el socket
-		OutputStream escrituraSocket;
 		try {
-			escrituraSocket = miSocket.getOutputStream();
-			OutputStreamWriter escritor = new OutputStreamWriter(escrituraSocket);
-			BufferedWriter escribirAlServidor = new BufferedWriter(escritor);
-			// preparo el sitio para leer
-			InputStream lecturaSocket = miSocket.getInputStream();
-			InputStreamReader lector = new InputStreamReader(lecturaSocket);
-			BufferedReader leeRespuesta = new BufferedReader(lector);
-			//Leo la respuesta obtenida del servidor	
-			String linea = leeRespuesta.readLine(); 
-			System.out.println("He leido: " + linea);
-			//Empiezo con el dialogo infinito con el servidor (sin esperar respuesta)
+			//Iniciar Buffers 
+			escribirAlServidor = new BufferedWriter(new OutputStreamWriter(miSocket.getOutputStream()));
+			leeRespuesta = new BufferedReader(new InputStreamReader(miSocket.getInputStream()));
+			
+			//Espero respuesta
 			//Se terminaría la conversación con un "*"
-			String msg;
-			do {
-				msg = sc.nextLine();
-				escribirAlServidor.write(msg);
-				escribirAlServidor.newLine();
-				escribirAlServidor.flush();
-			}while(!msg.equals("*"));
+			String linea;
+			do {	
+				linea = leeRespuesta.readLine(); 
+				System.out.println("He leido: " + linea);
+			}while(!linea.equals("*"));
 		
 				leeRespuesta.close();
 				escribirAlServidor.close();
-				miSocket.close();
 				sc.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void sendMsg(String msg) {
+		try {
+			escribirAlServidor.write(msg);
+			escribirAlServidor.newLine();
+			escribirAlServidor.flush();
+		} catch (IOException iee) {
+			iee.printStackTrace();
+		}
+		
 	}
 }

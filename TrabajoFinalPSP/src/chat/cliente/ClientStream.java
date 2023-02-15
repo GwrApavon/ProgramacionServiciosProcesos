@@ -1,49 +1,77 @@
 package chat.cliente;
 
+import java.awt.EventQueue;
+import java.awt.Window;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.UnknownHostException;
+import java.io.PrintStream;
 import java.util.Properties;
 
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
+import interfaz.VentanaCliente;
+import util.CapturePanel;
+import util.Consumer;
+import util.ProxyPrintStream;
+import util.StreamCapturer;
+
 public class ClientStream {
 	
 	private static final String PROPERTIES_FILE = "src/config/data.properties";
+	
+	public static void cargaPanel(Consumer textAreaCliente, ClienteThread ct) {
+		
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					VentanaCliente window = new VentanaCliente();
+					window.setCt(ct);
+					window.agnadePanel(textAreaCliente);
+					window.frame.setVisible(true);
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+	}
 	
 	public static void main(String[] args) {
 		String host = "192.168.2.61";
 		int puerto = 6000;
 		Properties properties = new Properties();
+		Consumer txtAreaCliente = new CapturePanel();
 		
 		try {
 			properties.load(new BufferedReader(new FileReader(PROPERTIES_FILE)));
 			puerto = Integer.parseInt(properties.getProperty("puerto"));
+			host = properties.getProperty("servidorHost");
+			
+			System.setProperty("javax.net.ssl.trustStore", properties.getProperty("usuarioAlmacen"));
+			System.setProperty("javax.net.ssl.trustStorePassword",properties.getProperty("usuarioPassAlmacen"));
+			// creamos el socket
+			
+			SSLSocketFactory factoria = (SSLSocketFactory) SSLSocketFactory.getDefault();
+			SSLSocket miSocket = (SSLSocket) factoria.createSocket(host,puerto);
+			ClienteThread ct = new ClienteThread(miSocket);
+			// preparo el panel de salida de mensajes---------
+			System.setOut(new PrintStream(new StreamCapturer("STDOUT", txtAreaCliente, System.out)));
+			cargaPanel(txtAreaCliente, ct);
+			
+			// guardaré la salida de error en un fichero de log
+			System.setErr(new ProxyPrintStream(System.err, "stderr.log"));
+			//------------------------------------------------
+			
+		ct.start();	
 		}catch(FileNotFoundException fnfe) {
 			fnfe.printStackTrace();
 		}catch(IOException ioe) {
 			ioe.printStackTrace();
 		}
-		System.setProperty("javax.net.ssl.trustStore", properties.getProperty("usuarioAlmacen"));
-		System.setProperty("javax.net.ssl.trustStorePassword",properties.getProperty("usuarioPassAlmacen"));
-		// creamos el socket
-		
-		try {
-			SSLSocketFactory factoria = (SSLSocketFactory) SSLSocketFactory.getDefault();
-			SSLSocket miSocket = (SSLSocket) factoria.createSocket(host,puerto);
-			ClienteThread ct = new ClienteThread(miSocket);
-			ct.start();	
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
+
 	}
-
-
 }

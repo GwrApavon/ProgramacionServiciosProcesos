@@ -57,6 +57,7 @@ public class ServerStream {
 			
 		    properties.load(new BufferedReader(new FileReader(PROPERTIES_FILE)));
 		    puerto = Integer.valueOf(properties.getProperty("puerto"));
+		    host = properties.getProperty("servidorHost");
 
 		    // preparo el panel de salida de mensajes---------
 			System.setOut(new PrintStream(new StreamCapturer("STDOUT", textAreaServidor, System.out)));
