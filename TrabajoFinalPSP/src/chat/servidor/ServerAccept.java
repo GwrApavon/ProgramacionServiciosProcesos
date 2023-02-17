@@ -39,36 +39,22 @@ public class ServerAccept extends Thread{
 			
 			sleep(3000);
 			String linea = leeRespuesta.readLine(); 
-			String lineaaux = linea;
-			if (linea != null && !linea.equals("*")){
-				System.out.println("He leido: " + linea);
-				linea = null;
-				do {
-					sleep(3000);
+			do {
+				if(linea.equals("*")) {
+					salir = true;
+				}
+				else{
 					linea = leeRespuesta.readLine(); 
-					if (linea != null && !linea.equals("*")){
-						System.out.println("He leido: " + linea);
-						lineaaux = linea;
-						linea = null;
-					}
-					else {
-						escribirCliente.write("Tiempo de espera agotado, se va a cerrar la conexión");
-						escribirCliente.newLine();
-						escribirCliente.flush();
-						salir = true;
-					}
-				}while(!lineaaux.equals("*") || salir == false);
-			}
-			else {
-				escribirCliente.write("Tiempo de espera agotado, se va a cerrar la conexión");
-				escribirCliente.newLine();
-				escribirCliente.flush();		
-			}
+					System.out.println("He leido: " + linea);
+				}
+			}while(salir == false);
+
+			cliente.close();
 			escribirCliente.close();
+			
 		}catch (IOException ioe) {
 			ioe.printStackTrace();
 		} catch (InterruptedException ie) {
-			// TODO Auto-generated catch block
 			ie.printStackTrace();
 		}
 	}

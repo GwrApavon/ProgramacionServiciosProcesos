@@ -9,6 +9,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import javax.net.ssl.SSLServerSocket;
@@ -25,7 +26,7 @@ import util.StreamCapturer;
 public class ServerStream {
 
 	private static final String PROPERTIES_FILE = "src/config/data.properties";
-		
+	public static final ArrayList <ServerAccept> clientes = new ArrayList <ServerAccept>();
 		/**
 		 * Muestra en pantalla un panel con un área de texto que mostrará la salida indicada (out o err)
 		 * @param textAreaServidor
@@ -76,12 +77,13 @@ public class ServerStream {
 			//ArrayList<MiHilo> listaHilos = new ArrayList<MiHilo>();
 			
 			for (int i = 1; i <= Integer.parseInt(properties.getProperty("numClientes")); i++) {
+				
 				SSLSocket cliente = (SSLSocket) miServidor.accept();
 				System.out.println("Conectado cliente " + i);
 				
 				ServerAccept sa = new ServerAccept(cliente);
+				clientes.add(sa);
 				sa.start();
-				//listaHilos.add(h);
 			}
 
 			// espero a que terminen los hilos para cerrar???

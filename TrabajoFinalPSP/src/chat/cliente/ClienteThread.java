@@ -14,7 +14,7 @@ import javax.net.ssl.SSLSocket;
 
 public class ClienteThread extends Thread{
 
-	public SSLSocket miSocket;
+	private SSLSocket miSocket;
 	BufferedWriter escribirAlServidor = null;
 	BufferedReader leeRespuesta = null;
 	
@@ -47,6 +47,14 @@ public class ClienteThread extends Thread{
 		}
 	}
 	
+	public void closeSocket() {
+		try {
+			this.miSocket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public void sendMsg(String msg) {
 		try {
 			escribirAlServidor.write(msg);

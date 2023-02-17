@@ -53,13 +53,9 @@ public class VentanaCliente implements KeyListener{
 		JButton btnNewButton = new JButton("Salir");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
 					ct.sendMsg("*");
-					ct.miSocket.close();
+					ct.closeSocket();
 					frame.dispose();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
 			}
 		});
 		
