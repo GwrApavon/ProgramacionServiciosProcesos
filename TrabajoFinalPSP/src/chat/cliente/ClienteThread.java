@@ -40,6 +40,7 @@ public class ClienteThread extends Thread{
 		
 				leeRespuesta.close();
 				escribirAlServidor.close();
+				miSocket.close();
 				sc.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -47,14 +48,6 @@ public class ClienteThread extends Thread{
 		}
 	}
 	
-	public void closeSocket() {
-		try {
-			this.miSocket.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 	public void sendMsg(String msg) {
 		try {
 			escribirAlServidor.write(msg);
@@ -63,6 +56,5 @@ public class ClienteThread extends Thread{
 		} catch (IOException iee) {
 			iee.printStackTrace();
 		}
-		
 	}
 }

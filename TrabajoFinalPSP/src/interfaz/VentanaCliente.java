@@ -3,6 +3,7 @@ package interfaz;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import java.awt.AWTEvent;
 import java.awt.Component;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -11,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.awt.event.AWTEventListener;
 import java.awt.event.ActionEvent;
 
 import util.Consumer;
@@ -18,7 +20,7 @@ import javax.swing.JTextField;
 
 import chat.cliente.ClienteThread;
 
-public class VentanaCliente implements KeyListener{
+public class VentanaCliente{
 
 	public JFrame frame;
 	private JTextField textField;
@@ -53,8 +55,7 @@ public class VentanaCliente implements KeyListener{
 		JButton btnNewButton = new JButton("Salir");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-					ct.sendMsg("*");
-					ct.closeSocket();
+					ct.sendMsg("*");					
 					frame.dispose();
 			}
 		});
@@ -75,15 +76,37 @@ public class VentanaCliente implements KeyListener{
 		frame.getContentPane().add(textField, gbc_textField);
 		textField.setColumns(10);
 		
+		textField.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub	
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					enviarMsg();
+				}
+				
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+			}
+
+			
+		});
 		JButton enviar = new JButton("Enviar");
 		enviar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String msg = textField.getText().toString();
-				ct.sendMsg(msg);
-				textField.setText("");
+				enviarMsg();
 			}
+
+			
 		});
-		frame.addKeyListener(this);
+		
 		
 		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
 		gbc_btnNewButton_1.insets = new Insets(0, 0, 5, 5);
@@ -104,22 +127,10 @@ public class VentanaCliente implements KeyListener{
 		
 	}
     
-	@Override
-	public void keyTyped(KeyEvent e) {}
-		
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-
-		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-			String msg = textField.getText().toString();
-			ct.sendMsg(msg);
-			textField.setText("");
-		}
-		
+	private void enviarMsg() {
+		String msg = textField.getText().toString();
+		ct.sendMsg(msg);
+		textField.setText("");
 	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {}
 
 }

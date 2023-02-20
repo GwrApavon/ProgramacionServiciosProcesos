@@ -62,7 +62,7 @@ public class ServerStream {
 
 		    // preparo el panel de salida de mensajes---------
 			System.setOut(new PrintStream(new StreamCapturer("STDOUT", textAreaServidor, System.out)));
-			cargaPanel(textAreaServidor);
+			
 			
 			// guardaré la salida de error en un fichero de log
 			System.setErr(new ProxyPrintStream(System.err, "stderr.log"));
@@ -75,12 +75,11 @@ public class ServerStream {
 			System.out.println("SERVIDOR: Escuchando por el puerto " + puerto);
 			miServidor.setSoTimeout(0);
 			//ArrayList<MiHilo> listaHilos = new ArrayList<MiHilo>();
-			
+			cargaPanel(textAreaServidor);
 			for (int i = 1; i <= Integer.parseInt(properties.getProperty("numClientes")); i++) {
 				
 				SSLSocket cliente = (SSLSocket) miServidor.accept();
 				System.out.println("Conectado cliente " + i);
-				
 				ServerAccept sa = new ServerAccept(cliente);
 				clientes.add(sa);
 				sa.start();
@@ -92,6 +91,17 @@ public class ServerStream {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();	
+		}
+	}
+	public static void enviarMensajes(String msg) {
+		for (ServerAccept sA : clientes) {
+			sA.sendMsg(msg);
+		}
+	}
+	public static void cerrarServer() {
+		for (ServerAccept sA : clientes) {
+			sA.sendMsg();
+			sA.cerrarHilo();
 		}
 	}
 	

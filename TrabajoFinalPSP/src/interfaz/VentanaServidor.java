@@ -3,6 +3,8 @@ package interfaz;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import chat.servidor.ServerStream;
+
 import java.awt.Component;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -41,7 +43,8 @@ public class VentanaServidor {
 		JButton btnNewButton = new JButton("Salir");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Salgo");
+				ServerStream.cerrarServer();
+				frame.dispose();
 			}
 		});
 		

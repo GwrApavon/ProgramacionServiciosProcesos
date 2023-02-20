@@ -14,6 +14,8 @@ import javax.net.ssl.SSLSocket;
 public class ServerAccept extends Thread{
 
 	private SSLSocket cliente;
+	BufferedWriter escribirCliente;
+	BufferedReader leeRespuesta;
 	
 	public ServerAccept(SSLSocket c) {
 		this.cliente = c;
@@ -23,14 +25,10 @@ public class ServerAccept extends Thread{
 		try {
 			
 			boolean salir = false;
-			//Preparo el sitio donde escribir� en el socket
-			OutputStream escrituraSocket = cliente.getOutputStream();
-			OutputStreamWriter escritor = new OutputStreamWriter(escrituraSocket);
-			BufferedWriter escribirCliente = new BufferedWriter(escritor);
+			//Preparo el sitio donde escribir� en el socket 
+			escribirCliente = new BufferedWriter(new OutputStreamWriter(cliente.getOutputStream()));
 			//Preparo el sitio para leer
-			InputStream lecturaSocket = cliente.getInputStream();
-			InputStreamReader lector = new InputStreamReader(lecturaSocket);
-			BufferedReader leeRespuesta = new BufferedReader(lector);
+			leeRespuesta = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
 			 
 			
 			escribirCliente.write("Bienvenido cliente, ya puedes hablar infinitamente conmigo");
@@ -40,12 +38,18 @@ public class ServerAccept extends Thread{
 			sleep(3000);
 			String linea = leeRespuesta.readLine(); 
 			do {
+				System.out.println("Usuario" + 1 + ": " + linea);
 				if(linea.equals("*")) {
 					salir = true;
+					escribirCliente.write("*");
+					escribirCliente.newLine();
+					escribirCliente.flush();
 				}
 				else{
 					linea = leeRespuesta.readLine(); 
-					System.out.println("He leido: " + linea);
+					String msg = "Usuario"+ 1 + ": " + linea;
+					System.out.println(msg);
+					ServerStream.enviarMensajes(msg);
 				}
 			}while(salir == false);
 
@@ -57,5 +61,34 @@ public class ServerAccept extends Thread{
 		} catch (InterruptedException ie) {
 			ie.printStackTrace();
 		}
+	}
+	
+	public void sendMsg() {
+		try {
+			escribirCliente.write("*");
+			escribirCliente.newLine();
+			escribirCliente.flush();
+		} catch (IOException iee) {
+			iee.printStackTrace();
+		}	
+	}
+	public void sendMsg(String msg) {
+		try {
+			escribirCliente.write(msg);
+			escribirCliente.newLine();
+			escribirCliente.flush();
+		} catch (IOException iee) {
+			iee.printStackTrace();
+		}	
+	}
+	
+	public void cerrarHilo() {
+		try {
+			cliente.close();
+			escribirCliente.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 }
