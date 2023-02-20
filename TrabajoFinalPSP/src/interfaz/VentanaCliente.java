@@ -75,25 +75,26 @@ public class VentanaCliente implements KeyListener{
 		frame.getContentPane().add(textField, gbc_textField);
 		textField.setColumns(10);
 		
-		JButton btnNewButton_1 = new JButton("Enviar");
-		btnNewButton_1.addActionListener(new ActionListener() {
+		JButton enviar = new JButton("Enviar");
+		enviar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String msg = textField.getText().toString();
 				ct.sendMsg(msg);
 				textField.setText("");
 			}
 		});
+		frame.addKeyListener(this);
 		
 		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
 		gbc_btnNewButton_1.insets = new Insets(0, 0, 5, 5);
 		gbc_btnNewButton_1.gridx = 9;
 		gbc_btnNewButton_1.gridy = 5;
-		frame.getContentPane().add(btnNewButton_1, gbc_btnNewButton_1);
+		frame.getContentPane().add(enviar, gbc_btnNewButton_1);
 	}
 
 	public void agnadePanel(Consumer salachat) {
 		GridBagConstraints gbc_salachat = new GridBagConstraints();
-		gbc_salachat.gridheight = 5;
+		gbc_salachat.gridheight = 4;
 		gbc_salachat.gridwidth = 7;
 		gbc_salachat.insets = new Insets(0, 0, 5, 5);
 		gbc_salachat.fill = GridBagConstraints.BOTH;
