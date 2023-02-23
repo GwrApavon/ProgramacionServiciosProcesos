@@ -35,9 +35,13 @@ public class ClienteThread extends Thread{
 			String linea;
 			do {	
 				linea = leeRespuesta.readLine(); 
-				System.out.println("He leido: " + linea);
+				if(linea.equals("*")) {
+					System.out.println("Se ha cerrado la conexion");
+				}
+				else {
+					System.out.println(linea);
+				}
 			}while(!linea.equals("*"));
-		
 				leeRespuesta.close();
 				escribirAlServidor.close();
 				miSocket.close();
@@ -56,5 +60,9 @@ public class ClienteThread extends Thread{
 		} catch (IOException iee) {
 			iee.printStackTrace();
 		}
+	}
+	
+	public SSLSocket getSocket() {
+		return this.miSocket;
 	}
 }

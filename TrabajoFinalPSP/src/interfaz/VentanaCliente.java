@@ -55,8 +55,8 @@ public class VentanaCliente{
 		JButton btnNewButton = new JButton("Salir");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-					ct.sendMsg("*");					
-					frame.dispose();
+				if(ct.getSocket() != null) ct.sendMsg("*");
+				frame.dispose();
 			}
 		});
 		

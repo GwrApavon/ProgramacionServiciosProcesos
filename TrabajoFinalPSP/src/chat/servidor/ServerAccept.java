@@ -16,9 +16,11 @@ public class ServerAccept extends Thread{
 	private SSLSocket cliente;
 	BufferedWriter escribirCliente;
 	BufferedReader leeRespuesta;
+	int id;
 	
-	public ServerAccept(SSLSocket c) {
+	public ServerAccept(SSLSocket c, int id) {
 		this.cliente = c;
+		this.id = id;
 	}
 	
 	public void run() {
@@ -36,18 +38,12 @@ public class ServerAccept extends Thread{
 			escribirCliente.flush();
 			
 			sleep(3000);
-			String linea = leeRespuesta.readLine(); 
+			
 			do {
-				System.out.println("Usuario" + 1 + ": " + linea);
-				if(linea.equals("*")) {
-					salir = true;
-					escribirCliente.write("*");
-					escribirCliente.newLine();
-					escribirCliente.flush();
-				}
-				else{
-					linea = leeRespuesta.readLine(); 
-					String msg = "Usuario"+ 1 + ": " + linea;
+				String linea = leeRespuesta.readLine(); 
+				if(linea.equals("*")) salir = true;
+				else{ 
+					String msg = "Usuario "+ id + ": " + linea;
 					System.out.println(msg);
 					ServerStream.enviarMensajes(msg);
 				}
@@ -63,7 +59,7 @@ public class ServerAccept extends Thread{
 		}
 	}
 	
-	public void sendMsg() {
+	public void sendMsgCerrar() {
 		try {
 			escribirCliente.write("*");
 			escribirCliente.newLine();
@@ -90,5 +86,9 @@ public class ServerAccept extends Thread{
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public SSLSocket getSocket() {
+		return this.cliente;
 	}
 }

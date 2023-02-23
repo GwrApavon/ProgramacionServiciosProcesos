@@ -79,8 +79,8 @@ public class ServerStream {
 			for (int i = 1; i <= Integer.parseInt(properties.getProperty("numClientes")); i++) {
 				
 				SSLSocket cliente = (SSLSocket) miServidor.accept();
-				System.out.println("Conectado cliente " + i);
-				ServerAccept sa = new ServerAccept(cliente);
+				System.out.println("Conectado usuario " + i);
+				ServerAccept sa = new ServerAccept(cliente,i);
 				clientes.add(sa);
 				sa.start();
 			}
@@ -100,8 +100,10 @@ public class ServerStream {
 	}
 	public static void cerrarServer() {
 		for (ServerAccept sA : clientes) {
-			sA.sendMsg();
-			sA.cerrarHilo();
+			if(sA.getSocket() != null) {
+				sA.sendMsgCerrar();
+				sA.cerrarHilo();
+			}
 		}
 	}
 	
