@@ -17,11 +17,16 @@ import util.CapturePanel;
 import util.Consumer;
 import util.ProxyPrintStream;
 import util.StreamCapturer;
-
+/**
+ * Cliente de un chat
+ * @author angel
+ *
+ */
 public class ClientStream {
 	
 	private static final String PROPERTIES_FILE = "src/config/data.properties";
 	
+	//Interfaz
 	public static void cargaPanel(Consumer textAreaCliente, ClienteThread ct) {
 		
 		EventQueue.invokeLater(new Runnable() {
@@ -40,6 +45,7 @@ public class ClientStream {
 
 	}
 	
+	//Main
 	public static void main(String[] args) {
 		String host = "192.168.2.61";
 		int puerto = 6000;
@@ -47,22 +53,23 @@ public class ClientStream {
 		Consumer txtAreaCliente = new CapturePanel();
 		
 		try {
+			//Properties
 			properties.load(new BufferedReader(new FileReader(PROPERTIES_FILE)));
 			puerto = Integer.parseInt(properties.getProperty("puerto"));
 			host = properties.getProperty("servidorHost");
-			
 			System.setProperty("javax.net.ssl.trustStore", properties.getProperty("usuarioAlmacen"));
 			System.setProperty("javax.net.ssl.trustStorePassword",properties.getProperty("usuarioPassAlmacen"));
-			// creamos el socket
-			
+
+			//Creamos el socket seguro del cliente
 			SSLSocketFactory factoria = (SSLSocketFactory) SSLSocketFactory.getDefault();
 			SSLSocket miSocket = (SSLSocket) factoria.createSocket(host,puerto);
 			ClienteThread ct = new ClienteThread(miSocket);
-			// preparo el panel de salida de mensajes---------
+			
+			//preparo el panel de salida de mensajes---------
 			System.setOut(new PrintStream(new StreamCapturer("STDOUT", txtAreaCliente, System.out)));
 			cargaPanel(txtAreaCliente, ct);
 			
-			// guardaré la salida de error en un fichero de log
+			//guardaré la salida de error en un fichero de log
 			System.setErr(new ProxyPrintStream(System.err, "stderr.log"));
 			//------------------------------------------------
 			

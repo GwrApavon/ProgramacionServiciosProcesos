@@ -12,6 +12,11 @@ import java.util.Scanner;
 
 import javax.net.ssl.SSLSocket;
 
+/**
+ * Hilo para las funciones de un cliente
+ * @author angel
+ *
+ */
 public class ClienteThread extends Thread{
 
 	private SSLSocket miSocket;
@@ -22,12 +27,17 @@ public class ClienteThread extends Thread{
 		miSocket = s;
 	}
 	
-	
+	/**
+	 * Función principal
+	 * El cliente está permanentemente a la espera de los mensajes recibidos por el servidor
+	 */
 	public void run() {
 		Scanner sc = new Scanner(System.in);
 		try {
-			//Iniciar Buffers 
+
+			//Preparo el sitio donde escribirá en el socket 
 			escribirAlServidor = new BufferedWriter(new OutputStreamWriter(miSocket.getOutputStream()));
+			//Preparo el sitio para leer
 			leeRespuesta = new BufferedReader(new InputStreamReader(miSocket.getInputStream()));
 			
 			//Espero respuesta
@@ -52,6 +62,11 @@ public class ClienteThread extends Thread{
 		}
 	}
 	
+	/**
+	 * Metodo para mandar un mensaje 
+	 * Se llama desde otra clase
+	 * @param msg mensaje que se envía
+	 */
 	public void sendMsg(String msg) {
 		try {
 			escribirAlServidor.write(msg);
@@ -62,6 +77,10 @@ public class ClienteThread extends Thread{
 		}
 	}
 	
+	/**
+	 * Getter del socket
+	 * @return
+	 */
 	public SSLSocket getSocket() {
 		return this.miSocket;
 	}

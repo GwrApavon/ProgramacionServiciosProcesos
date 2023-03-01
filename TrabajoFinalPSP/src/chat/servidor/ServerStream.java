@@ -55,27 +55,36 @@ public class ServerStream {
 		Consumer textAreaServidor = new CapturePanel(); // area de texto que meteremos en una ventana
 
 		try {
-			
-		    properties.load(new BufferedReader(new FileReader(PROPERTIES_FILE)));
-		    puerto = Integer.valueOf(properties.getProperty("puerto"));
-		    host = properties.getProperty("servidorHost");
 
-		    // preparo el panel de salida de mensajes---------
+		    //Preparo el panel de salida de mensajes
 			System.setOut(new PrintStream(new StreamCapturer("STDOUT", textAreaServidor, System.out)));
 			
 			
-			// guardaré la salida de error en un fichero de log
+			//Guardaré la salida de error en un fichero de log
 			System.setErr(new ProxyPrintStream(System.err, "stderr.log"));
-			//------------------------------------------------
+			
 		    
+			//Properties
+		    properties.load(new BufferedReader(new FileReader(PROPERTIES_FILE)));
+		    puerto = Integer.valueOf(properties.getProperty("puerto"));
+		    host = properties.getProperty("servidorHost");
 			System.setProperty("javax.net.ssl.keyStore", properties.getProperty("nombreAlmacenSSL"));
 			System.setProperty("javax.net.ssl.keyStorePassword", properties.getProperty("passwordAlmacenSSL"));
+			
+			//Preparo el socket
 			SSLServerSocketFactory factoria = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
 			SSLServerSocket miServidor = (SSLServerSocket) factoria.createServerSocket(puerto,0, InetAddress.getByName(host));
 			System.out.println("SERVIDOR: Escuchando por el puerto " + puerto);
 			miServidor.setSoTimeout(0);
-			//ArrayList<MiHilo> listaHilos = new ArrayList<MiHilo>();
+			
+			//Carga del panel
 			cargaPanel(textAreaServidor);
+			
+			//Bucle para la creación de clientes según se vayan conectando (max. nº establecido en properties)
+			/*
+			 * Cuando se conecta un cliente se crea un socket, sale un mensaje de conexion, 
+			 * se crea un hilo de servidor, se añade al arraylist y se inicia el hilo.
+			 */
 			for (int i = 1; i <= Integer.parseInt(properties.getProperty("numClientes")); i++) {
 				
 				SSLSocket cliente = (SSLSocket) miServidor.accept();
@@ -93,11 +102,20 @@ public class ServerStream {
 			e.printStackTrace();	
 		}
 	}
+	
+	/**
+	 * Método para llamar al método sendMsg de todos los hilos activos
+	 * @param msg
+	 */
 	public static void enviarMensajes(String msg) {
 		for (ServerAccept sA : clientes) {
 			sA.sendMsg(msg);
 		}
 	}
+	
+	/**
+	 * Método para cerrar el servidor
+	 */
 	public static void cerrarServer() {
 		for (ServerAccept sA : clientes) {
 			if(sA.getSocket() != null) {

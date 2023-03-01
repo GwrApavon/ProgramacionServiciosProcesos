@@ -11,6 +11,11 @@ import java.io.OutputStreamWriter;
 
 import javax.net.ssl.SSLSocket;
 
+/**
+ * Hilo para las funciones del servidor
+ * @author angel
+ *
+ */
 public class ServerAccept extends Thread{
 
 	private SSLSocket cliente;
@@ -18,16 +23,24 @@ public class ServerAccept extends Thread{
 	BufferedReader leeRespuesta;
 	int id;
 	
+	//Constructor
 	public ServerAccept(SSLSocket c, int id) {
 		this.cliente = c;
 		this.id = id;
 	}
 	
+	/**
+	 * El servidor está permanentemente recibiendo mensajes de los clientes.
+	 * En el momento que le llega un mensaje de un cliente, le pasa este al resto de hilos presentes
+	 * y estos los envían a sus respectivos clientes.
+	 * También se mandará al propio cliente que lo ha mandado (me parece lo más lógico poder ver tus propios mensajes)
+	 */
 	public void run() {
 		try {
 			
 			boolean salir = false;
-			//Preparo el sitio donde escribir� en el socket 
+			
+			//Preparo el sitio donde escribirá en el socket 
 			escribirCliente = new BufferedWriter(new OutputStreamWriter(cliente.getOutputStream()));
 			//Preparo el sitio para leer
 			leeRespuesta = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
@@ -45,6 +58,7 @@ public class ServerAccept extends Thread{
 				else{ 
 					String msg = "Usuario "+ id + ": " + linea;
 					System.out.println(msg);
+					//Envío de mensajes a los clientes
 					ServerStream.enviarMensajes(msg);
 				}
 			}while(salir == false);
@@ -59,6 +73,9 @@ public class ServerAccept extends Thread{
 		}
 	}
 	
+	/**
+	 * Método para cerrar la conexión del cliente
+	 */
 	public void sendMsgCerrar() {
 		try {
 			escribirCliente.write("*");
@@ -68,6 +85,11 @@ public class ServerAccept extends Thread{
 			iee.printStackTrace();
 		}	
 	}
+	
+	/**
+	 * Método para enviar el mensaje al cliente
+	 * @param msg
+	 */
 	public void sendMsg(String msg) {
 		try {
 			escribirCliente.write(msg);
@@ -78,6 +100,9 @@ public class ServerAccept extends Thread{
 		}	
 	}
 	
+	/**
+	 * Método para cerrar las conexiones antes de apagar el servidor
+	 */
 	public void cerrarHilo() {
 		try {
 			cliente.close();
@@ -88,6 +113,10 @@ public class ServerAccept extends Thread{
 		
 	}
 	
+	/**
+	 * Getter del socket
+	 * @return
+	 */
 	public SSLSocket getSocket() {
 		return this.cliente;
 	}

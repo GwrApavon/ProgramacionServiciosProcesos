@@ -52,6 +52,9 @@ public class VentanaCliente{
 		frame.getContentPane().setLayout(gridBagLayout);
 		
 		
+		/**
+		 * Botón para cerrar la conexión del cliente con el servidor y su respectiva ventana
+		 */
 		JButton btnNewButton = new JButton("Salir");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -76,6 +79,9 @@ public class VentanaCliente{
 		frame.getContentPane().add(textField, gbc_textField);
 		textField.setColumns(10);
 		
+		/**
+		 * Listener para enviar el mesaje de la textbox de la interfaz una vez presionado el "Enter"
+		 */
 		textField.addKeyListener(new KeyListener() {
 
 			@Override
@@ -83,6 +89,7 @@ public class VentanaCliente{
 				// TODO Auto-generated method stub	
 			}
 
+			
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -98,10 +105,14 @@ public class VentanaCliente{
 
 			
 		});
+		
+		/**
+		 * Botón que llama a enviar mensaje y envía el texto que haya en la textbox de la interfaz
+		 */
 		JButton enviar = new JButton("Enviar");
 		enviar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				enviarMsg();
+				if(ct.getSocket() != null)enviarMsg();
 			}
 
 			
@@ -127,6 +138,9 @@ public class VentanaCliente{
 		
 	}
     
+	/**
+	 * Método que llama al sendMsg del hilo
+	 */
 	private void enviarMsg() {
 		String msg = textField.getText().toString();
 		ct.sendMsg(msg);
