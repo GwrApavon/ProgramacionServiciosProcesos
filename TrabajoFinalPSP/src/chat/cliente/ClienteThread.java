@@ -47,6 +47,7 @@ public class ClienteThread extends Thread{
 				linea = leeRespuesta.readLine(); 
 				if(linea.equals("*")) {
 					System.out.println("Se ha cerrado la conexion");
+					sendMsg("#");
 				}
 				else {
 					System.out.println(linea);

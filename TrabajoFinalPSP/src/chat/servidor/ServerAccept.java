@@ -54,9 +54,12 @@ public class ServerAccept extends Thread{
 			
 			do {
 				String linea = leeRespuesta.readLine(); 
-				if(linea.equals("*")) {
+				if(linea == null || linea.equals("*")) {
 					salir = true;
 					sendMsgCerrar();
+				}
+				else if(linea.equals("#")) {
+					salir = true;
 				}
 				else{ 
 					String msg = "Usuario "+ id + ": " + linea;
@@ -65,12 +68,13 @@ public class ServerAccept extends Thread{
 					ServerStream.enviarMensajes(msg);
 				}
 			}while(salir == false);
-
+			
 			cliente.close();
 			escribirCliente.close();
+			leeRespuesta.close();
 			
 		}catch (IOException ioe) {
-			ioe.printStackTrace();
+			System.err.println("El canal con el cliente " + id + " está cerrado");
 		} catch (InterruptedException ie) {
 			ie.printStackTrace();
 		}
