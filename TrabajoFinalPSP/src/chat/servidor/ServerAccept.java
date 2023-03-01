@@ -46,7 +46,7 @@ public class ServerAccept extends Thread{
 			leeRespuesta = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
 			 
 			
-			escribirCliente.write("Bienvenido cliente, ya puedes hablar infinitamente conmigo");
+			escribirCliente.write("Te has unido al chat");
 			escribirCliente.newLine();
 			escribirCliente.flush();
 			
@@ -54,7 +54,10 @@ public class ServerAccept extends Thread{
 			
 			do {
 				String linea = leeRespuesta.readLine(); 
-				if(linea.equals("*")) salir = true;
+				if(linea.equals("*")) {
+					salir = true;
+					sendMsgCerrar();
+				}
 				else{ 
 					String msg = "Usuario "+ id + ": " + linea;
 					System.out.println(msg);
@@ -107,6 +110,7 @@ public class ServerAccept extends Thread{
 		try {
 			cliente.close();
 			escribirCliente.close();
+			leeRespuesta.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -121,3 +125,4 @@ public class ServerAccept extends Thread{
 		return this.cliente;
 	}
 }
+	

@@ -84,4 +84,8 @@ public class ClienteThread extends Thread{
 	public SSLSocket getSocket() {
 		return this.miSocket;
 	}
+	
+	public boolean getStream() {
+		return escribirAlServidor == null;
+	}
 }

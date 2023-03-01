@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.ConnectException;
 import java.util.Properties;
 
 import javax.net.ssl.SSLSocket;
@@ -73,7 +74,10 @@ public class ClientStream {
 			System.setErr(new ProxyPrintStream(System.err, "stderr.log"));
 			//------------------------------------------------
 			
-		ct.start();	
+			ct.start();	
+		}catch(ConnectException ce) {
+			System.err.println("No se ha podido conectar con el servidor");
+			System.err.println("Nota: Asegurate de que esté abierto");
 		}catch(FileNotFoundException fnfe) {
 			fnfe.printStackTrace();
 		}catch(IOException ioe) {

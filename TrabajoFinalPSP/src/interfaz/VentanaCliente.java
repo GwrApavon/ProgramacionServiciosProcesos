@@ -58,7 +58,7 @@ public class VentanaCliente{
 		JButton btnNewButton = new JButton("Salir");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(ct.getSocket() != null) ct.sendMsg("*");
+				if(ct.getSocket() != null && ct.getStream() == true) ct.sendMsg("*");
 				frame.dispose();
 			}
 		});
@@ -144,7 +144,7 @@ public class VentanaCliente{
 	private void enviarMsg() {
 		String msg = textField.getText().toString();
 		ct.sendMsg(msg);
-		textField.setText("");
+		if(msg.equals("*")) frame.dispose();
+		else textField.setText("");
 	}
-
 }

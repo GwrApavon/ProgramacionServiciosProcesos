@@ -119,7 +119,9 @@ public class ServerStream {
 	public static void cerrarServer() {
 		for (ServerAccept sA : clientes) {
 			if(sA.getSocket() != null) {
-				sA.sendMsgCerrar();
+				if(sA.isAlive()) {
+					sA.sendMsgCerrar();				
+				}
 				sA.cerrarHilo();
 			}
 		}
